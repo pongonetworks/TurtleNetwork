@@ -144,6 +144,7 @@ package object appender extends ScorexLogging {
       )
       effectiveBalance <- genBalance(height).left.map(GenericError(_))
       hit    = calcHit(prevBlockData, generator)
+//      target = calcTarget(parent.timestamp, parent.consensusData.baseTarget, blockTime, effectiveBalance)
       target = calcTarget(parent.timestamp, parent.consensusData.baseTarget, blockTime, effectiveBalance)
       _ <- Either.cond(
         hit < target || (height == height1 && block.uniqueId == correctBlockId1) || (height == height2 && block.uniqueId == correctBlockId2),

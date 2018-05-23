@@ -147,6 +147,33 @@ class UtxPoolImpl(time: Time,
     val txs = if (sortInBlock) reversedValidTxs.sorted(TransactionsOrdering.InBlock) else reversedValidTxs.reverse
     (txs, finalConstraint)
   }
+  def packUnconfirmed2(max: Int, sortInBlock: Boolean, currentTs: Long): Seq[Transaction] = {
+    val s = stateReader()
+    val differ = TransactionDiffer(fs, history.lastBlockTimestamp(), currentTs, s.height) _
+    val (invalidTxs, reversedValidTxs, _) = transactions
+      .values.asScala.toSeq
+      .sorted(TransactionsOrdering.InUTXPool)
+      .foldLeft((Seq.empty[ByteStr], Seq.empty[Transaction], Monoid[Diff].empty)) {
+        case ((invalid, valid, diff), tx) if valid.size <= max =>
+          differ(composite(diff.asBlockDiff, s), tx) match {
+            case Right(newDiff) if valid.size < max =>
+              (invalid, tx +: valid, Monoid.combine(diff, newDiff))
+            case Right(_) =>
+              (invalid, valid, diff)
+            case Left(_) =>
+              (tx.id() +: invalid, valid, diff)
+          }
+        case (r, _) => r
+      }
+
+    invalidTxs.foreach { itx =>
+      transactions.remove(itx)
+      pessimisticPortfolios.remove(itx)
+    }
+    if (sortInBlock)
+      reversedValidTxs.sorted(TransactionsOrdering.InBlock)
+    else reversedValidTxs.reverse
+  }
 
   override private[utx] def createBatchOps: UtxBatchOps = new BatchOpsImpl(stateReader)
 

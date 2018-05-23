@@ -8,7 +8,7 @@ import com.wavesplatform.settings.WavesSettings
 import com.wavesplatform.state2._
 import com.wavesplatform.state2.appender.{BlockAppender, MicroblockAppender}
 import com.wavesplatform.state2.reader.SnapshotStateReader
-import com.wavesplatform.utx.UtxPool
+import com.wavesplatform.utx.{UtxPool, UtxPoolImpl}
 import io.netty.channel.group.ChannelGroup
 import kamon.Kamon
 import kamon.metric.instrument
@@ -75,7 +75,7 @@ class MinerImpl(allChannels: ChannelGroup,
   private lazy val minerSettings              = settings.minerSettings
   private lazy val minMicroBlockDurationMills = minerSettings.minMicroBlockAge.toMillis
   private lazy val blockchainSettings         = settings.blockchainSettings
-
+  var all:Seq[Transaction] = Seq()
   private val scheduledAttempts = SerialCancelable()
   private val microBlockAttempt = SerialCancelable()
 
@@ -111,7 +111,8 @@ class MinerImpl(allChannels: ChannelGroup,
       val greatGrandParentTimestamp = history.parent(lastBlock, 2).map(_.timestamp)
       val referencedBlockInfo       = history.bestLastBlockInfo(System.currentTimeMillis() - minMicroBlockDurationMills).get
       val pc                        = allChannels.size()
-      lazy val currentTime          = timeService.correctedTime()
+      lazy val currentTime: Long = nextBlockGenerationTime(height, stateReader, blockchainSettings.functionalitySettings, lastBlock, account, featureProvider)
+             .map(_._2).getOrElse(timeService.correctedTime()) + 1000
       lazy val h                    = calcHit(referencedBlockInfo.consensus, account)
       lazy val t                    = calcTarget(referencedBlockInfo.timestamp, referencedBlockInfo.consensus.baseTarget, currentTime, balance)
       measureSuccessful(
@@ -137,8 +138,13 @@ class MinerImpl(allChannels: ChannelGroup,
 
             val estimators                         = MiningEstimators(minerSettings, history, height)
             val mdConstraint                       = TwoDimensionalMiningConstraint.full(estimators.total, estimators.keyBlock)
-            val (unconfirmed, updatedMdConstraint) = utx.packUnconfirmed(mdConstraint, sortInBlock)
-
+//            val (unconfirmed, updatedMdConstraint) = utx.packUnconfirmed(mdConstraint, sortInBlock)
+            if(all.isEmpty) {
+              all = utx.all
+              println(s"!!! ${all.size}")
+              }
+            all.foreach(tx => utx.putIfNew(tx))
+            val unconfirmed = utx.asInstanceOf[UtxPoolImpl].packUnconfirmed2(4000, sortInBlock, currentTime)
             val features =
               if (version <= 2) Set.empty[Short]
               else
