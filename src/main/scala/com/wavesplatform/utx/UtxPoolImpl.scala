@@ -150,14 +150,14 @@ class UtxPoolImpl(time: Time,
   def packUnconfirmed2(max: Int, sortInBlock: Boolean, currentTs: Long): Seq[Transaction] = {
     val s = stateReader()
     val differ = TransactionDiffer(fs, history.lastBlockTimestamp(), currentTs, s.height) _
-    val (invalidTxs, reversedValidTxs, _) = transactions
-      .values.asScala.toSeq
+    val (invalidTxs, reversedValidTxs, _, finalConstraint, _) = transactions.values.asScala.toSeq
       .sorted(TransactionsOrdering.InUTXPool)
-      .foldLeft((Seq.empty[ByteStr], Seq.empty[Transaction], Monoid[Diff].empty)) {
-        case ((invalid, valid, diff), tx) if valid.size <= max =>
-          differ(composite(diff.asBlockDiff, s), tx) match {
+      .foldLeft((Seq.empty[ByteStr], Seq.empty[Transaction], Monoid[Diff].empty, rest, false)) {
+        case (curr @ (_, _, _, _, skip), _) if skip => curr
+        case (((invalid, valid, diff, currRest, _), tx) if valid.size <= max =>
+          differ(composite(s, diff), history, tx) match {
             case Right(newDiff) if valid.size < max =>
-              (invalid, tx +: valid, Monoid.combine(diff, newDiff))
+              (invalid, tx +: valid, Monoid.combine(diff, newDiff), updatedRest, updatedRest.isEmpty)
             case Right(_) =>
               (invalid, valid, diff)
             case Left(_) =>

@@ -75,7 +75,6 @@ class MinerImpl(allChannels: ChannelGroup,
   private lazy val minerSettings              = settings.minerSettings
   private lazy val minMicroBlockDurationMills = minerSettings.minMicroBlockAge.toMillis
   private lazy val blockchainSettings         = settings.blockchainSettings
-  var all:Seq[Transaction] = Seq()
   private val scheduledAttempts = SerialCancelable()
   private val microBlockAttempt = SerialCancelable()
 
@@ -100,6 +99,8 @@ class MinerImpl(allChannels: ChannelGroup,
       ))
 
   private def ngEnabled: Boolean = history.featureActivationHeight(BlockchainFeatures.NG.id).exists(history.height > _ + 1)
+
+  var all:Seq[Transaction] = Seq()
 
   private def generateOneBlockTask(account: PrivateKeyAccount, balance: Long)(
       delay: FiniteDuration): Task[Either[String, (MiningEstimators, Block, MiningConstraint)]] =
