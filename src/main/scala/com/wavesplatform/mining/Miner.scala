@@ -112,7 +112,7 @@ class MinerImpl(allChannels: ChannelGroup,
       val greatGrandParentTimestamp = history.parent(lastBlock, 2).map(_.timestamp)
       val referencedBlockInfo       = history.bestLastBlockInfo(System.currentTimeMillis() - minMicroBlockDurationMills).get
       val pc                        = allChannels.size()
-      lazy val currentTime: Long = nextBlockGenerationTime(height, stateReader, blockchainSettings.functionalitySettings, lastBlock, account, featureProvider)
+      lazy val currentTime: Long = nextBlockGenerationTime(height, stateReader, blockchainSettings.functionalitySettings, lastBlock, account, history)
              .map(_._2).getOrElse(timeService.correctedTime()) + 1000
       lazy val h                    = calcHit(referencedBlockInfo.consensus, account)
       lazy val t                    = calcTarget(referencedBlockInfo.timestamp, referencedBlockInfo.consensus.baseTarget, currentTime, balance)
