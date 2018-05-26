@@ -147,32 +147,30 @@ class UtxPoolImpl(time: Time,
     val txs = if (sortInBlock) reversedValidTxs.sorted(TransactionsOrdering.InBlock) else reversedValidTxs.reverse
     (txs, finalConstraint)
   }
-  def packUnconfirmed2(max: Int, sortInBlock: Boolean, currentTs: Long): Seq[Transaction] = {
-    val s = stateReader
+  override def packUnconfirmed(rest: TwoDimensionalMiningConstraint, sortInBlock: Boolean, currentTs: Long): (Seq[Transaction], TwoDimensionalMiningConstraint) = {
+    val s      = stateReader
     val differ = TransactionDiffer(fs, history.lastBlockTimestamp, currentTs, s.height) _
     val (invalidTxs, reversedValidTxs, _, finalConstraint, _) = transactions.values.asScala.toSeq
       .sorted(TransactionsOrdering.InUTXPool)
       .foldLeft((Seq.empty[ByteStr], Seq.empty[Transaction], Monoid[Diff].empty, rest, false)) {
         case (curr @ (_, _, _, _, skip), _) if skip => curr
-        case ((invalid, valid, diff, currRest, _), tx) if valid.size <= max =>
+        case ((invalid, valid, diff, currRest, _), tx) =>
           differ(composite(s, diff), history, tx) match {
-            case Right(newDiff) if valid.size < max =>
-              (invalid, tx +: valid, Monoid.combine(diff, newDiff), updatedRest, updatedRest.isEmpty)
-            case Right(_) =>
-              (invalid, valid, diff)
+            case Right(newDiff) =>
+              val updatedRest = currRest.put(tx)
+              if (updatedRest.isOverfilled) (invalid, valid, diff, currRest, true)
+              else (invalid, tx +: valid, Monoid.combine(diff, newDiff), updatedRest, updatedRest.isEmpty)
             case Left(_) =>
-              (tx.id() +: invalid, valid, diff)
+              (tx.id() +: invalid, valid, diff, currRest, false)
           }
-        case (r, _) => r
       }
 
     invalidTxs.foreach { itx =>
       transactions.remove(itx)
       pessimisticPortfolios.remove(itx)
     }
-    if (sortInBlock)
-      reversedValidTxs.sorted(TransactionsOrdering.InBlock)
-    else reversedValidTxs.reverse
+    val txs = if (sortInBlock) reversedValidTxs.sorted(TransactionsOrdering.InBlock) else reversedValidTxs.reverse
+    (txs, finalConstraint)
   }
 
   override private[utx] def createBatchOps: UtxBatchOps = new BatchOpsImpl(stateReader)
