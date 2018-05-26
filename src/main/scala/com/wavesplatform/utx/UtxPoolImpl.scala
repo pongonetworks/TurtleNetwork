@@ -148,8 +148,8 @@ class UtxPoolImpl(time: Time,
     (txs, finalConstraint)
   }
   def packUnconfirmed2(max: Int, sortInBlock: Boolean, currentTs: Long): Seq[Transaction] = {
-    val s = stateReader()
-    val differ = TransactionDiffer(fs, history.lastBlockTimestamp(), currentTs, s.height) _
+    val s = stateReader
+    val differ = TransactionDiffer(fs, history.lastBlockTimestamp, currentTs, s.height) _
     val (invalidTxs, reversedValidTxs, _, finalConstraint, _) = transactions.values.asScala.toSeq
       .sorted(TransactionsOrdering.InUTXPool)
       .foldLeft((Seq.empty[ByteStr], Seq.empty[Transaction], Monoid[Diff].empty, rest, false)) {
