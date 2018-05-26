@@ -145,7 +145,7 @@ class MinerImpl(allChannels: ChannelGroup,
               println(s"!!! ${all.size}")
               }
             all.foreach(tx => utx.putIfNew(tx))
-            val (unconfirmed, updatedMdConstraint) = utx.asInstanceOf[UtxPoolImpl].packUnconfirmed2(4000, sortInBlock, currentTime)
+            val (unconfirmed, updatedMdConstraint) = utx.asInstanceOf[UtxPoolImpl].packUnconfirmed2(mdConstraint, sortInBlock, currentTime)
             val features =
               if (version <= 2) Set.empty[Short]
               else

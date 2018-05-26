@@ -147,7 +147,7 @@ class UtxPoolImpl(time: Time,
     val txs = if (sortInBlock) reversedValidTxs.sorted(TransactionsOrdering.InBlock) else reversedValidTxs.reverse
     (txs, finalConstraint)
   }
-  override def packUnconfirmed(rest: TwoDimensionalMiningConstraint, sortInBlock: Boolean, currentTs: Long): (Seq[Transaction], TwoDimensionalMiningConstraint) = {
+  override def packUnconfirmed2(rest: TwoDimensionalMiningConstraint, sortInBlock: Boolean, currentTs: Long): (Seq[Transaction], TwoDimensionalMiningConstraint) = {
     val s      = stateReader
     val differ = TransactionDiffer(fs, history.lastBlockTimestamp, currentTs, s.height) _
     val (invalidTxs, reversedValidTxs, _, finalConstraint, _) = transactions.values.asScala.toSeq
