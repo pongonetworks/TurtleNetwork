@@ -9,13 +9,13 @@ class WavesSettingsSpecification extends FlatSpec with Matchers {
   private val home = System.getProperty("user.home")
 
   private def config(configName: String) =
-    WavesSettings.fromConfig(ConfigFactory.parseFile(new File(s"TN-$configName.conf")).withFallback(ConfigFactory.load()))
+    WavesSettings.fromConfig(ConfigFactory.parseFile(new File(s"Agate-$configName.conf")).withFallback(ConfigFactory.load()))
 
   def testConfig(configName: String)(additionalChecks: WavesSettings => Unit = _ => ()) {
-    "TNSettings" should s"read values from default config with $configName overrides" in {
+    "AgateSettings" should s"read values from default config with $configName overrides" in {
       val settings = config(configName)
 
-      settings.directory should be(home + "/TN")
+      settings.directory should be(home + "/Agate")
       settings.networkSettings should not be null
       settings.walletSettings should not be null
       settings.blockchainSettings should not be null
@@ -34,8 +34,8 @@ class WavesSettingsSpecification extends FlatSpec with Matchers {
   testConfig("testnet")()
   testConfig("devnet")()
 
-  "TNSettings" should "resolve folders correctly" in {
-    val config = loadConfig(ConfigFactory.parseString(s"""TN {
+  "AgateSettings" should "resolve folders correctly" in {
+    val config = loadConfig(ConfigFactory.parseString(s"""Agate {
          |  directory = "/xxx"
          |  data-directory = "/xxx/data"
          |}""".stripMargin))

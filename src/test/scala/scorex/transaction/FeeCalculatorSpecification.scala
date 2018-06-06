@@ -13,35 +13,35 @@ import scorex.transaction.lease.{LeaseCancelTransaction, LeaseTransaction}
 class FeeCalculatorSpecification extends PropSpec with PropertyChecks with Matchers with TransactionGen {
 
   private val configString =
-    """TN {
+    """Agate {
       |  fees {
       |    payment {
-      |      TN = 100000
+      |      Agate = 100000
       |    }
       |    issue {
-      |      TN = 100000000
+      |      Agate = 100000000
       |    }
       |    transfer {
-      |      TN = 100000
+      |      Agate = 100000
       |      "JAudr64y6YxTgLn9T5giKKqWGkbMfzhdRAxmNNfn6FJN" = 2
       |    }
       |    reissue {
-      |      TN = 200000
+      |      Agate = 200000
       |    }
       |    burn {
-      |      TN = 300000
+      |      Agate = 300000
       |    }
       |    lease {
-      |      TN = 400000
+      |      Agate = 400000
       |    }
       |    lease-cancel {
-      |      TN = 500000
+      |      Agate = 500000
       |    }
       |    create-alias {
-      |      TN = 600000
+      |      Agate = 600000
       |    }
       |    data {
-      |      TN = 100000
+      |      Agate = 100000
       |    }
       |  }
       |}""".stripMargin

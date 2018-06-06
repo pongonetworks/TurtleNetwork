@@ -20,7 +20,7 @@ class CustomFeeTransactionSuite extends BaseTransactionSuite with CancelAfterFai
 
   private val defaultAssetQuantity = 1000000
   private val transferFee          = 100000
-  private val issueFee             = 1.TN
+  private val issueFee             = 1.Agate
 
   test("make transfer with custom asset") {
     val (balance1, eff1) = notMiner.accountBalances(addressDefaultNode)
@@ -56,7 +56,7 @@ object CustomFeeTransactionSuite {
       quantity = 1000000,
       decimals = 2,
       reissuable = false,
-      fee = 1.TN,
+      fee = 1.Agate,
       timestamp = System.currentTimeMillis()
     )
     .right
@@ -66,14 +66,14 @@ object CustomFeeTransactionSuite {
   import NodeConfigs.Default
 
   private val acceptAssetsFee = ConfigFactory.parseString(s"""
-       |TN.fees.transfer {
+       |Agate.fees.transfer {
        |  $assetId = 100000
        |
        |}
       """.stripMargin)
 
   private val notMinerConfig = ConfigFactory.parseString(s"""
-       |TN.miner.enable=no
+       |Agate.miner.enable=no
        |
       """.stripMargin).withFallback(acceptAssetsFee)
 

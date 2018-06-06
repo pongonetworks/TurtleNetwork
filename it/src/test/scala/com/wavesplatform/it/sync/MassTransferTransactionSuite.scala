@@ -15,12 +15,12 @@ import scala.util.Random
 
 class MassTransferTransactionSuite extends BaseTransactionSuite with CancelAfterFailure {
 
-  private val assetQuantity              = 100.TN
-  private val transferAmount             = 5.TN
-  private val leasingAmount              = 5.TN
-  private val leasingFee                 = 0.003.TN
+  private val assetQuantity              = 100.Agate
+  private val transferAmount             = 5.Agate
+  private val leasingAmount              = 5.Agate
+  private val leasingFee                 = 0.003.Agate
   private val transferFee                = notMiner.settings.feesSettings.fees(TransferTransaction.typeId)(0).fee
-  private val issueFee                   = 1.TN
+  private val issueFee                   = 1.Agate
   private val massTransferFeePerTransfer = notMiner.settings.feesSettings.fees(MassTransferTransaction.typeId)(0).fee
 
   private def calcFee(numberOfRecipients: Int): Long = {
@@ -29,7 +29,7 @@ class MassTransferTransactionSuite extends BaseTransactionSuite with CancelAfter
 
   private def fakeSignature = Base58.encode(Array.fill(64)(Random.nextInt.toByte))
 
-  test("asset mass transfer changes asset balances and sender's.TN balance is decreased by fee.") {
+  test("asset mass transfer changes asset balances and sender's.Agate balance is decreased by fee.") {
 
     val (balance1, eff1) = notMiner.accountBalances(firstAddress)
     val (balance2, eff2) = notMiner.accountBalances(secondAddress)
@@ -48,7 +48,7 @@ class MassTransferTransactionSuite extends BaseTransactionSuite with CancelAfter
     notMiner.assertAssetBalance(secondAddress, assetId, transferAmount)
   }
 
-  test("TN mass transfer changes TN balances") {
+  test("Agate mass transfer changes Agate balances") {
 
     val (balance1, eff1) = notMiner.accountBalances(firstAddress)
     val (balance2, eff2) = notMiner.accountBalances(secondAddress)
@@ -66,12 +66,12 @@ class MassTransferTransactionSuite extends BaseTransactionSuite with CancelAfter
     notMiner.assertBalances(thirdAddress, balance3 + 2 * transferAmount, eff3 + 2 * transferAmount)
   }
 
-  test("can not make mass transfer without having enough TN") {
+  test("can not make mass transfer without having enough Agate") {
     val (balance1, eff1) = notMiner.accountBalances(firstAddress)
     val (balance2, eff2) = notMiner.accountBalances(secondAddress)
     val transfers        = List(Transfer(secondAddress, balance1 / 2), Transfer(thirdAddress, balance1 / 2))
 
-    assertBadRequestAndResponse(sender.massTransfer(firstAddress, transfers, calcFee(transfers.size)), "negative TN balance")
+    assertBadRequestAndResponse(sender.massTransfer(firstAddress, transfers, calcFee(transfers.size)), "negative Agate balance")
 
     nodes.waitForHeightArise()
     notMiner.assertBalances(firstAddress, balance1, eff1)
@@ -98,7 +98,7 @@ class MassTransferTransactionSuite extends BaseTransactionSuite with CancelAfter
     val leaseTxId = sender.lease(firstAddress, secondAddress, leasingAmount, leasingFee).id
     nodes.waitForHeightAriseAndTxPresent(leaseTxId)
 
-    assertBadRequestAndResponse(sender.massTransfer(firstAddress, transfers, calcFee(transfers.size)), "negative TN balance")
+    assertBadRequestAndResponse(sender.massTransfer(firstAddress, transfers, calcFee(transfers.size)), "negative Agate balance")
     nodes.waitForHeightArise()
     notMiner.assertBalances(firstAddress, balance1 - leasingFee, eff1 - leasingAmount - leasingFee)
     notMiner.assertBalances(secondAddress, balance2, eff2 + leasingAmount)

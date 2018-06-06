@@ -17,13 +17,13 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
 
   private val waitCompletion       = 2.minutes
   private val defaultAssetQuantity = 100000
-  private val transferAmount       = 5.TN
-  private val leasingAmount        = 5.TN
-  private val leasingFee           = 0.003.TN
-  private val transferFee          = 0.002.TN
-  private val issueFee             = 5.TN
+  private val transferAmount       = 5.Agate
+  private val leasingAmount        = 5.Agate
+  private val leasingFee           = 0.003.Agate
+  private val transferFee          = 0.002.Agate
+  private val issueFee             = 5.Agate
 
-  test("asset transfer changes sender's and recipient's asset balance; issuer's.TN balance is decreased by fee") {
+  test("asset transfer changes sender's and recipient's asset balance; issuer's.Agate balance is decreased by fee") {
     val f = for {
       ((firstBalance, firstEffBalance), (secondBalance, secondEffBalance)) <- notMiner
         .accountBalances(firstAddress)
@@ -47,7 +47,7 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
     Await.result(f, waitCompletion)
   }
 
-  test("TN transfer changes TN balances and eff.b.") {
+  test("Agate transfer changes Agate balances and eff.b.") {
     val f = for {
       ((firstBalance, firstEffBalance), (secondBalance, secondEffBalance)) <- notMiner
         .accountBalances(firstAddress)
@@ -63,10 +63,10 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
     Await.result(f, waitCompletion)
   }
 
-  test("invalid signed TN transfer should not be in UTX or blockchain") {
+  test("invalid signed Agate transfer should not be in UTX or blockchain") {
     def invalidByTsTx(ts: Long) =
       TransferTransaction
-        .create(None, sender.privateKey, AddressOrAlias.fromString(sender.address).right.get, 1, ts, None, 1.TN, Array.emptyByteArray)
+        .create(None, sender.privateKey, AddressOrAlias.fromString(sender.address).right.get, 1, ts, None, 1.Agate, Array.emptyByteArray)
         .right
         .get
 
@@ -111,7 +111,7 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
     Await.result(f, waitCompletion)
   }
 
-  test("can not make transfer without having enough of TN") {
+  test("can not make transfer without having enough of Agate") {
     val f = for {
       fb <- traverse(nodes)(_.height).map(_.min)
 
@@ -119,7 +119,7 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
         .accountBalances(firstAddress)
         .zip(notMiner.accountBalances(secondAddress))
 
-      transferFailureAssertion <- assertBadRequest(sender.transfer(secondAddress, firstAddress, secondBalance + 1.TN, transferFee))
+      transferFailureAssertion <- assertBadRequest(sender.transfer(secondAddress, firstAddress, secondBalance + 1.Agate, transferFee))
 
       _ <- traverse(nodes)(_.waitForHeight(fb + 2))
 
@@ -159,7 +159,7 @@ class TransferTransactionSuite extends BaseTransactionSuite with TransferSending
     Await.result(f, waitCompletion)
   }
 
-  test("can not make transfer without having enough of your own TN") {
+  test("can not make transfer without having enough of your own Agate") {
     val f = for {
       fb <- traverse(nodes)(_.height).map(_.min)
 

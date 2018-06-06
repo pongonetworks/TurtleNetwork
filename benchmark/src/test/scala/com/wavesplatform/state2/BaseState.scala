@@ -19,7 +19,7 @@ import scorex.transaction.{GenesisTransaction, Transaction}
 trait BaseState extends TransactionGenBase {
   import BaseState._
 
-  private val fs: FunctionalitySettings = updateFunctionalitySettings(FunctionalitySettings.TESTNET)
+  private val fs: FunctionalitySettings = updateFunctionalitySettings(FunctionalitySettings.TESAgateET)
   private var db: DB                    = _
 
   private var _state: LevelDBWriter           = _

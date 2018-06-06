@@ -6,7 +6,7 @@
 
 **0.3.2**
 
-* By default walletDir and dataDir located in $HOME/TN
+* By default walletDir and dataDir located in $HOME/Agate
 
 **0.3.1**
 
@@ -22,31 +22,31 @@
 
 * peers.dat format changed. Delete old version.
 * Different HTTP status codes in replies in HTTP API were implemented
-* TN' Scorex v1.3.2
+* Agate' Scorex v1.3.2
 
 **0.2.0**
 
 * Peers blacklist ttl configuration via "p2p"/"blacklistResidenceTimeMilliseconds"
-* Upgrade to TN' Scorex v1.3.1
+* Upgrade to Agate' Scorex v1.3.1
 
 **0.2.0-RC7**
 
-* New API /TN/payment returns senderPublicKey
-* New API /TN/create-signed-payment
-* /TN/external-payment deprecated. 
-  Use new /TN/broadcast-signed-payment.
-* New API /TN/payment/signature
+* New API /Agate/payment returns senderPublicKey
+* New API /Agate/create-signed-payment
+* /Agate/external-payment deprecated. 
+  Use new /Agate/broadcast-signed-payment.
+* New API /Agate/payment/signature
 * minimumTxFee verification for API
 
 **0.2.0-RC5**
 
-* /TN/external-payment returns error for incorrect recipient
+* /Agate/external-payment returns error for incorrect recipient
 
 **0.2.0-RC4**
 
 * Fixed issue with incorrect Handshake
 * Balance with confirmations is the minimum balance
-* /TN/external-payment returns error if account balance invalid
+* /Agate/external-payment returns error if account balance invalid
 * New API method /consensus/generatingbalance/{address}
 
 **0.2.0-RC3**
@@ -64,4 +64,4 @@
 
 **0.1.2**
 
-* Upgrade to Scorex 1.2.4. Clean /scorex/TN/data/ before run.
+* Upgrade to Scorex 1.2.4. Clean /scorex/Agate/data/ before run.

@@ -26,10 +26,10 @@ class SetScriptTransactionSuite extends BaseTransactionSuite with CancelAfterFai
   private val acc2 = randomPk
   private val acc3 = randomPk
 
-  private val transferAmount: Long = 1.TN
-  private val fee: Long            = 0.001.TN
+  private val transferAmount: Long = 1.Agate
+  private val fee: Long            = 0.001.Agate
 
-  test("setup acc0 with 1 TN") {
+  test("setup acc0 with 1 Agate") {
     val tx =
       VersionedTransferTransaction
         .selfSigned(

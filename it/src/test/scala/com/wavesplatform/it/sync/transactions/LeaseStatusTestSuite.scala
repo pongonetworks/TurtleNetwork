@@ -13,8 +13,8 @@ class LeaseStatusTestSuite extends BaseTransactionSuite with CancelAfterFailure 
 
   override protected def nodeConfigs: Seq[Config] = Configs
 
-  private val transferFee   = 0.001.TN
-  private val leasingAmount = 10.TN
+  private val transferFee   = 0.001.Agate
+  private val leasingAmount = 10.Agate
 
   test("verification of leasing status") {
     val createdLeaseTxId = sender.lease(firstAddress, secondAddress, leasingAmount, leasingFee = transferFee).id
@@ -42,7 +42,7 @@ object LeaseStatusTestSuite {
   private val blockGenerationOffest = "10000ms"
   import com.wavesplatform.it.NodeConfigs.Default
 
-  private val minerConfig = ConfigFactory.parseString(s"""TN {
+  private val minerConfig = ConfigFactory.parseString(s"""Agate {
        |   miner{
        |      enable = yes
        |      minimal-block-generation-offset = $blockGenerationOffest
@@ -53,7 +53,7 @@ object LeaseStatusTestSuite {
        |}
      """.stripMargin)
 
-  private val notMinerConfig = ConfigFactory.parseString(s"""TN {
+  private val notMinerConfig = ConfigFactory.parseString(s"""Agate {
        |   miner.enable = no
        |   miner.minimal-block-generation-offset = $blockGenerationOffest
        |}

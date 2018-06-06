@@ -153,7 +153,7 @@ object MatcherMassOrdersTestSuite {
   import NodeConfigs.Default
 
   private val matcherConfig = ConfigFactory.parseString(s"""
-       |TN.matcher {
+       |Agate.matcher {
        |  enable=yes
        |  account="3Hm3LGoNPmw1VTZ3eRA2pAfeQPhnaBm6YFC"
        |  bind-address="0.0.0.0"
@@ -162,19 +162,19 @@ object MatcherMassOrdersTestSuite {
        |  order-cleanup-interval = 20s
        |  rest-order-limit=$orderLimit
        |}
-       |TN.rest-api {
+       |Agate.rest-api {
        |    enable = yes
        |    api-key-hash = 7L6GpLHhA5KyJTAVc8WFHwEcyTY8fC8rRbyMCiFnM4i
        |}
-       |TN.miner.enable=no
+       |Agate.miner.enable=no
       """.stripMargin)
 
   private val nonGeneratingPeersConfig = ConfigFactory.parseString(
     """
-      |TN.matcher {
+      |Agate.matcher {
       | order-cleanup-interval = 30s
       |}
-      |TN.miner.enable=no
+      |Agate.miner.enable=no
     """.stripMargin
   )
 

@@ -13,10 +13,10 @@ object FirstDifferentBlock extends App {
     blockSigAt(node1, h) == blockSigAt(node2, h)
   }
 
-  val TESTNET1 = "http://52.30.47.67:6869"
-  val TESTNET2 = "http://52.28.66.217:6869"
-  val TESTNET3 = "http://52.77.111.219:6869"
-  val TESTNET4 = "http://52.51.92.182:6869"
+  val TESAgateET1 = "http://52.30.47.67:6869"
+  val TESAgateET2 = "http://52.28.66.217:6869"
+  val TESAgateET3 = "http://52.77.111.219:6869"
+  val TESAgateET4 = "http://52.51.92.182:6869"
 
   val DEVNET1  = "http://34.251.200.245:6869"
   val DEVNET1D = "http://34.251.200.245:16869"

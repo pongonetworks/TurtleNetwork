@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo Options: $TN_OPTS
-java $TN_OPTS -jar /opt/TN/TN.jar /opt/TN/template.conf
+echo Options: $Agate_OPTS
+java $Agate_OPTS -jar /opt/Agate/Agate.jar /opt/Agate/template.conf

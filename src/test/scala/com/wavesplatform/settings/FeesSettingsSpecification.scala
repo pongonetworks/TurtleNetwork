@@ -6,15 +6,15 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class FeesSettingsSpecification extends FlatSpec with Matchers {
   "FeesSettings" should "read values" in {
-    val config = ConfigFactory.parseString("""TN {
+    val config = ConfigFactory.parseString("""Agate {
         |  network.file = "xxx"
         |  fees {
-        |    payment.TN = 100000
-        |    issue.TN = 100000000
-        |    transfer.TN = 100000
-        |    reissue.TN = 100000
-        |    burn.TN = 100000
-        |    exchange.TN = 100000
+        |    payment.Agate = 100000
+        |    issue.Agate = 100000000
+        |    transfer.Agate = 100000
+        |    reissue.Agate = 100000
+        |    burn.Agate = 100000
+        |    exchange.Agate = 100000
         |  }
         |  miner.timeout = 10
         |}
@@ -23,39 +23,39 @@ class FeesSettingsSpecification extends FlatSpec with Matchers {
     val settings = FeesSettings.fromConfig(config)
     settings.fees.size should be(6)
 
-    settings.fees(2) should be(List(FeeSettings("TN", 100000)))
-    settings.fees(3) should be(List(FeeSettings("TN", 100000000)))
-    settings.fees(4) should be(List(FeeSettings("TN", 100000)))
-    settings.fees(5) should be(List(FeeSettings("TN", 100000)))
-    settings.fees(6) should be(List(FeeSettings("TN", 100000)))
-    settings.fees(7) should be(List(FeeSettings("TN", 100000)))
+    settings.fees(2) should be(List(FeeSettings("Agate", 100000)))
+    settings.fees(3) should be(List(FeeSettings("Agate", 100000000)))
+    settings.fees(4) should be(List(FeeSettings("Agate", 100000)))
+    settings.fees(5) should be(List(FeeSettings("Agate", 100000)))
+    settings.fees(6) should be(List(FeeSettings("Agate", 100000)))
+    settings.fees(7) should be(List(FeeSettings("Agate", 100000)))
   }
 
   it should "combine read few fees for one transaction type" in {
-    val config = ConfigFactory.parseString("""TN.fees {
+    val config = ConfigFactory.parseString("""Agate.fees {
         |  payment {
-        |    TN0 = 0
+        |    Agate0 = 0
         |  }
         |  issue {
-        |    TN1 = 111
-        |    TN2 = 222
-        |    TN3 = 333
+        |    Agate1 = 111
+        |    Agate2 = 222
+        |    Agate3 = 333
         |  }
         |  transfer {
-        |    TN4 = 444
+        |    Agate4 = 444
         |  }
         |}
       """.stripMargin).resolve()
 
     val settings = FeesSettings.fromConfig(config)
     settings.fees.size should be(3)
-    settings.fees(2).toSet should equal(Set(FeeSettings("TN0", 0)))
-    settings.fees(3).toSet should equal(Set(FeeSettings("TN1", 111), FeeSettings("TN2", 222), FeeSettings("TN3", 333)))
-    settings.fees(4).toSet should equal(Set(FeeSettings("TN4", 444)))
+    settings.fees(2).toSet should equal(Set(FeeSettings("Agate0", 0)))
+    settings.fees(3).toSet should equal(Set(FeeSettings("Agate1", 111), FeeSettings("Agate2", 222), FeeSettings("Agate3", 333)))
+    settings.fees(4).toSet should equal(Set(FeeSettings("Agate4", 444)))
   }
 
   it should "allow empty list" in {
-    val config = ConfigFactory.parseString("TN.fees = {}").resolve()
+    val config = ConfigFactory.parseString("Agate.fees = {}").resolve()
 
     val settings = FeesSettings.fromConfig(config)
     settings.fees.size should be(0)
@@ -63,19 +63,19 @@ class FeesSettingsSpecification extends FlatSpec with Matchers {
 
   it should "override values" in {
     val config = ConfigFactory
-      .parseString("""TN.fees {
-        |  payment.TN1 = 1111
-        |  reissue.TN5 = 0
+      .parseString("""Agate.fees {
+        |  payment.Agate1 = 1111
+        |  reissue.Agate5 = 0
         |}
       """.stripMargin)
       .withFallback(
-        ConfigFactory.parseString("""TN.fees {
-          |  payment.TN = 100000
-          |  issue.TN = 100000000
-          |  transfer.TN = 100000
-          |  reissue.TN = 100000
-          |  burn.TN = 100000
-          |  exchange.TN = 100000
+        ConfigFactory.parseString("""Agate.fees {
+          |  payment.Agate = 100000
+          |  issue.Agate = 100000000
+          |  transfer.Agate = 100000
+          |  reissue.Agate = 100000
+          |  burn.Agate = 100000
+          |  exchange.Agate = 100000
           |}
         """.stripMargin)
       )
@@ -83,12 +83,12 @@ class FeesSettingsSpecification extends FlatSpec with Matchers {
 
     val settings = FeesSettings.fromConfig(config)
     settings.fees.size should be(6)
-    settings.fees(2).toSet should equal(Set(FeeSettings("TN", 100000), FeeSettings("TN1", 1111)))
-    settings.fees(5).toSet should equal(Set(FeeSettings("TN", 100000), FeeSettings("TN5", 0)))
+    settings.fees(2).toSet should equal(Set(FeeSettings("Agate", 100000), FeeSettings("Agate1", 1111)))
+    settings.fees(5).toSet should equal(Set(FeeSettings("Agate", 100000), FeeSettings("Agate5", 0)))
   }
 
   it should "fail on incorrect long values" in {
-    val config = ConfigFactory.parseString("TN.fees.payment.TN=N/A").resolve()
+    val config = ConfigFactory.parseString("Agate.fees.payment.Agate=N/A").resolve()
 
     intercept[WrongType] {
       FeesSettings.fromConfig(config)
@@ -96,13 +96,13 @@ class FeesSettingsSpecification extends FlatSpec with Matchers {
   }
 
   it should "not fail on long values as strings" in {
-    val config   = ConfigFactory.parseString("TN.fees.transfer.TN=\"1000\"").resolve()
+    val config   = ConfigFactory.parseString("Agate.fees.transfer.Agate=\"1000\"").resolve()
     val settings = FeesSettings.fromConfig(config)
-    settings.fees(4).toSet should equal(Set(FeeSettings("TN", 1000)))
+    settings.fees(4).toSet should equal(Set(FeeSettings("Agate", 1000)))
   }
 
   it should "fail on unknown transaction type" in {
-    val config = ConfigFactory.parseString("TN.fees.shmayment.TN=100").resolve()
+    val config = ConfigFactory.parseString("Agate.fees.shmayment.Agate=100").resolve()
 
     intercept[NoSuchElementException] {
       FeesSettings.fromConfig(config)
@@ -113,56 +113,56 @@ class FeesSettingsSpecification extends FlatSpec with Matchers {
     val defaultConfig = ConfigFactory.load()
 
     val config   = ConfigFactory.parseString("""
-        |TN.fees {
+        |Agate.fees {
         |  issue {
-        |    TN = 200000000
+        |    Agate = 200000000
         |  }
         |  transfer {
-        |    TN = 300000,
+        |    Agate = 300000,
         |    "6MPKrD5B7GrfbciHECg1MwdvRUhRETApgNZspreBJ8JL" = 1
         |  }
         |  reissue {
-        |    TN = 400000
+        |    Agate = 400000
         |  }
         |  burn {
-        |    TN = 500000
+        |    Agate = 500000
         |  }
         |  exchange {
-        |    TN = 600000
+        |    Agate = 600000
         |  }
         |  lease {
-        |    TN = 700000
+        |    Agate = 700000
         |  }
         |  lease-cancel {
-        |    TN = 800000
+        |    Agate = 800000
         |  }
         |  create-alias {
-        |    TN = 900000
+        |    Agate = 900000
         |  }
         |  mass-transfer {
-        |    TN = 10000,
+        |    Agate = 10000,
         |  }
         |  data {
-        |    TN = 200000
+        |    Agate = 200000
         |  }
         |  set-script {
-        |    TN = 300000
+        |    Agate = 300000
         |  }
         |}
       """.stripMargin).withFallback(defaultConfig).resolve()
     val settings = FeesSettings.fromConfig(config)
     settings.fees.size should be(11)
-    settings.fees(3).toSet should equal(Set(FeeSettings("TN", 200000000)))
-    settings.fees(4).toSet should equal(Set(FeeSettings("TN", 300000), FeeSettings("6MPKrD5B7GrfbciHECg1MwdvRUhRETApgNZspreBJ8JL", 1)))
-    settings.fees(5).toSet should equal(Set(FeeSettings("TN", 400000)))
-    settings.fees(6).toSet should equal(Set(FeeSettings("TN", 500000)))
-    settings.fees(7).toSet should equal(Set(FeeSettings("TN", 600000)))
-    settings.fees(8).toSet should equal(Set(FeeSettings("TN", 700000)))
-    settings.fees(9).toSet should equal(Set(FeeSettings("TN", 800000)))
-    settings.fees(10).toSet should equal(Set(FeeSettings("TN", 900000)))
-    settings.fees(11).toSet should equal(Set(FeeSettings("TN", 10000)))
-    settings.fees(12).toSet should equal(Set(FeeSettings("TN", 200000)))
-    settings.fees(13).toSet should equal(Set(FeeSettings("TN", 300000)))
+    settings.fees(3).toSet should equal(Set(FeeSettings("Agate", 200000000)))
+    settings.fees(4).toSet should equal(Set(FeeSettings("Agate", 300000), FeeSettings("6MPKrD5B7GrfbciHECg1MwdvRUhRETApgNZspreBJ8JL", 1)))
+    settings.fees(5).toSet should equal(Set(FeeSettings("Agate", 400000)))
+    settings.fees(6).toSet should equal(Set(FeeSettings("Agate", 500000)))
+    settings.fees(7).toSet should equal(Set(FeeSettings("Agate", 600000)))
+    settings.fees(8).toSet should equal(Set(FeeSettings("Agate", 700000)))
+    settings.fees(9).toSet should equal(Set(FeeSettings("Agate", 800000)))
+    settings.fees(10).toSet should equal(Set(FeeSettings("Agate", 900000)))
+    settings.fees(11).toSet should equal(Set(FeeSettings("Agate", 10000)))
+    settings.fees(12).toSet should equal(Set(FeeSettings("Agate", 200000)))
+    settings.fees(13).toSet should equal(Set(FeeSettings("Agate", 300000)))
 
   }
 }

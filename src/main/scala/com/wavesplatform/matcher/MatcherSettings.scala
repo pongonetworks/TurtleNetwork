@@ -38,7 +38,7 @@ case class MatcherSettings(enable: Boolean,
 
 object MatcherSettings {
   implicit val chosenCase: NameMapper = net.ceedubs.ficus.readers.namemappers.implicits.hyphenCase
-  val configPath: String              = "TN.matcher"
+  val configPath: String              = "Agate.matcher"
 
   def fromConfig(config: Config): MatcherSettings = {
     val enabled              = config.as[Boolean](s"$configPath.enable")

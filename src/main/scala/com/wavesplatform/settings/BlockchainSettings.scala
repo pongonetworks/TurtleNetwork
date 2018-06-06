@@ -63,7 +63,7 @@ object FunctionalitySettings {
     doubleFeaturesPeriodsAfterHeight = 0
   )
 
-  val TESTNET = apply(
+  val TESAgateET = apply(
     featureCheckBlocksPeriod = 3000,
     blocksForFeatureActivation = 2700,
     allowTemporaryNegativeUntil = 1477958400000L,
@@ -80,7 +80,7 @@ object FunctionalitySettings {
     doubleFeaturesPeriodsAfterHeight = Int.MaxValue
   )
 
-  val configPath = "TN.blockchain.custom.functionality"
+  val configPath = "Agate.blockchain.custom.functionality"
 }
 
 case class GenesisTransactionSettings(recipient: String, amount: Long)
@@ -111,7 +111,7 @@ object GenesisSettings {
     60.seconds
   )
 
-  val TESTNET = GenesisSettings(
+  val TESAgateET = GenesisSettings(
     1460678400000L,
     1478000000000L,
     50000000000000000l,
@@ -135,25 +135,25 @@ case class BlockchainSettings(addressSchemeCharacter: Char,
                               genesisSettings: GenesisSettings)
 
 object BlockchainType extends Enumeration {
-  val TESTNET = Value("TESTNET")
+  val TESAgateET = Value("TESAgateET")
   val MAINNET = Value("MAINNET")
   val CUSTOM  = Value("CUSTOM")
 }
 
 object BlockchainSettings {
-  val configPath: String = "TN.blockchain"
+  val configPath: String = "Agate.blockchain"
 
   def fromConfig(config: Config): BlockchainSettings = {
     val blockchainType = config.as[BlockchainType.Value](s"$configPath.type")
     val (addressSchemeCharacter, functionalitySettings, genesisSettings) = blockchainType match {
-      case BlockchainType.TESTNET =>
-        ('T', FunctionalitySettings.TESTNET, GenesisSettings.TESTNET)
+      case BlockchainType.TESAgateET =>
+        ('T', FunctionalitySettings.TESAgateET, GenesisSettings.TESAgateET)
       case BlockchainType.MAINNET =>
         ('L', FunctionalitySettings.MAINNET, GenesisSettings.MAINNET)
       case BlockchainType.CUSTOM =>
         val addressSchemeCharacter = config.as[String](s"$configPath.custom.address-scheme-character").charAt(0)
-        val functionalitySettings  = config.as[FunctionalitySettings]("TN.blockchain.custom.functionality")
-        val genesisSettings        = config.as[GenesisSettings]("TN.blockchain.custom.genesis")
+        val functionalitySettings  = config.as[FunctionalitySettings]("Agate.blockchain.custom.functionality")
+        val genesisSettings        = config.as[GenesisSettings]("Agate.blockchain.custom.genesis")
         (addressSchemeCharacter, functionalitySettings, genesisSettings)
     }
 

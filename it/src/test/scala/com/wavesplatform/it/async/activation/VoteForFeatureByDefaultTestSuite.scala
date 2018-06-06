@@ -29,7 +29,7 @@ class VoteForFeatureByDefaultTestSuite
     NodeConfigs.newBuilder
       .overrideBase(
         _.raw(
-          s"""TN {
+          s"""Agate {
          |  blockchain.custom {
          |    functionality {
          |      pre-activated-features = {}
@@ -46,12 +46,12 @@ class VoteForFeatureByDefaultTestSuite
          |      ]
          |    }
          |  }
-         |  TN.features.supported=[$defaultVotingFeatureNum]
+         |  Agate.features.supported=[$defaultVotingFeatureNum]
          |  miner.quorum = 3
          |}""".stripMargin
         ))
       .withDefault(3)
-      .withSpecial(_.raw(s"TN.features.supported=[$nonVotingFeatureNum]"))
+      .withSpecial(_.raw(s"Agate.features.supported=[$nonVotingFeatureNum]"))
       .buildNonConflicting()
 
   private def supportedNodes   = nodes.init

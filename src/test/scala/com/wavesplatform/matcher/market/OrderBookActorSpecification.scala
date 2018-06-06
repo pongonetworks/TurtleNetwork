@@ -44,7 +44,7 @@ class OrderBookActorSpecification
 
   var eventsProbe = TestProbe()
 
-  val pair                             = AssetPair(Some(ByteStr("BTC".getBytes)), Some(ByteStr("TN".getBytes)))
+  val pair                             = AssetPair(Some(ByteStr("BTC".getBytes)), Some(ByteStr("Agate".getBytes)))
   val storedState: SnapshotStateReader = stub[SnapshotStateReader]
   val hugeAmount                       = Long.MaxValue / 2
   (storedState.portfolio _)
@@ -54,7 +54,7 @@ class OrderBookActorSpecification
                 LeaseBalance.empty,
                 Map(
                   ByteStr("BTC".getBytes) -> hugeAmount,
-                  ByteStr("TN".getBytes)  -> hugeAmount
+                  ByteStr("Agate".getBytes)  -> hugeAmount
                 )))
   val issueTransaction: IssueTransaction = IssueTransaction
     .create(PrivateKeyAccount("123".getBytes), "MinerReward".getBytes, Array.empty, 10000000000L, 8.toByte, true, 100000L, 10000L)
@@ -85,7 +85,7 @@ class OrderBookActorSpecification
                          stub[ChannelGroup],
                          settings,
                          stub[History],
-                         FunctionalitySettings.TESTNET) with RestartableActor))
+                         FunctionalitySettings.TESAgateET) with RestartableActor))
 
   private def getOrders(actor: ActorRef) = {
     actor ! GetOrdersRequest

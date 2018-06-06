@@ -7,8 +7,8 @@ import scorex.utils.ScorexLogging
   * System constants here.
   */
 object Constants extends ScorexLogging {
-  val ApplicationName = "TN"
-  val AgentName       = s"TN v${Version.VersionString}"
+  val ApplicationName = "Agate"
+  val AgentName       = s"Agate v${Version.VersionString}"
 
   val UnitsInWave = 100000000L
   val TotalWaves  = 100000000L

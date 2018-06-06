@@ -28,7 +28,7 @@ class CreateAliasTransactionDiffTest extends PropSpec with PropertyChecks with M
     anotherAliasTx         = CreateAliasTransaction.create(master, alias2, fee + 3, ts).right.get
   } yield (genesis, aliasTx, sameAliasTx, sameAliasOtherSenderTx, anotherAliasTx)
 
-  property("can create and resolve aliases preserving TN invariant") {
+  property("can create and resolve aliases preserving Agate invariant") {
     forAll(preconditionsAndAliasCreations) {
       case (gen, aliasTx, _, _, anotherAliasTx) =>
         assertDiffAndState(Seq(TestBlock.create(Seq(gen, aliasTx))), TestBlock.create(Seq(anotherAliasTx))) {

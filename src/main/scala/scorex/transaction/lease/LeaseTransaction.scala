@@ -74,7 +74,7 @@ object LeaseTransaction extends TransactionParserFor[LeaseTransaction] with Tran
              recipient: AddressOrAlias,
              signature: ByteStr): Either[ValidationError, TransactionT] = {
     if (amount <= 0) {
-      Left(ValidationError.NegativeAmount(amount, "TN"))
+      Left(ValidationError.NegativeAmount(amount, "Agate"))
     } else if (Try(Math.addExact(amount, fee)).isFailure) {
       Left(ValidationError.OverflowError)
     } else if (fee <= 0) {

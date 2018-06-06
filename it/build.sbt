@@ -80,9 +80,9 @@ lazy val itTestsCommonSettings: Seq[Def.Setting[_]] = Seq(
             runJVMOptions = Vector(
               "-XX:+IgnoreUnrecognizedVMOptions",
               "--add-modules=java.xml.bind",
-              "-DTN.it.logging.appender=FILE",
-              s"-DTN.it.logging.dir=${logDirectoryValue / suite.name.replaceAll("""(\w)\w*\.""", "$1.")}",
-              s"-DTN.profiling.yourKitDir=$yourKitRedistDirValue"
+              "-DAgate.it.logging.appender=FILE",
+              s"-DAgate.it.logging.dir=${logDirectoryValue / suite.name.replaceAll("""(\w)\w*\.""", "$1.")}",
+              s"-DAgate.profiling.yourKitDir=$yourKitRedistDirValue"
             ) ++ javaOptionsValue,
             connectInput = false,
             envVars = envVarsValue

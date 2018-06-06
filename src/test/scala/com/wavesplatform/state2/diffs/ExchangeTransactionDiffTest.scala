@@ -22,7 +22,7 @@ import scorex.transaction.{GenesisTransaction, ValidationError}
 
 class ExchangeTransactionDiffTest extends PropSpec with PropertyChecks with Matchers with TransactionGen with Inside with NoShrink {
 
-  property("preserves TN invariant, stores match info, rewards matcher") {
+  property("preserves Agate invariant, stores match info, rewards matcher") {
 
     val preconditionsAndExchange: Gen[(GenesisTransaction, GenesisTransaction, IssueTransaction, IssueTransaction, ExchangeTransaction)] = for {
       buyer  <- accountGen
@@ -79,7 +79,7 @@ class ExchangeTransactionDiffTest extends PropSpec with PropertyChecks with Matc
     }
   }
 
-  property("buy TN without enough money for fee") {
+  property("buy Agate without enough money for fee") {
     val preconditions: Gen[(GenesisTransaction, GenesisTransaction, IssueTransaction, ExchangeTransaction)] = for {
       buyer  <- accountGen
       seller <- accountGen

@@ -15,10 +15,10 @@ import scala.concurrent.duration._
 class LeasingTransactionsSuite extends BaseTransactionSuite with CancelAfterFailure {
 
   private val waitCompletion = 2.minutes
-  private val defaultFee     = 2.TN
-  private val leasingAmount  = 5.TN
+  private val defaultFee     = 2.Agate
+  private val leasingAmount  = 5.Agate
 
-  test("leasing TN decreases lessor's eff.b. and increases lessee's eff.b.; lessor pays fee") {
+  test("leasing Agate decreases lessor's eff.b. and increases lessee's eff.b.; lessor pays fee") {
     val f = for {
       height <- traverse(nodes)(_.height).map(_.max)
       _      <- traverse(nodes)(_.waitForHeight(height + 1))
@@ -36,7 +36,7 @@ class LeasingTransactionsSuite extends BaseTransactionSuite with CancelAfterFail
     Await.result(f, waitCompletion)
   }
 
-  test("can not make leasing without having enough TN") {
+  test("can not make leasing without having enough Agate") {
     val f = for {
       fb <- traverse(nodes)(_.height).map(_.min)
 
@@ -45,7 +45,7 @@ class LeasingTransactionsSuite extends BaseTransactionSuite with CancelAfterFail
         .zip(notMiner.accountBalances(secondAddress))
 
       //secondAddress effective balance more than general balance
-      leaseFailureAssertion <- assertBadRequest(sender.lease(secondAddress, firstAddress, secondBalance + 1.TN, defaultFee))
+      leaseFailureAssertion <- assertBadRequest(sender.lease(secondAddress, firstAddress, secondBalance + 1.Agate, defaultFee))
 
       _ <- traverse(nodes)(_.waitForHeight(fb + 2))
 
@@ -57,7 +57,7 @@ class LeasingTransactionsSuite extends BaseTransactionSuite with CancelAfterFail
     Await.result(f, waitCompletion)
   }
 
-  test("can not make leasing without having enough TN for fee") {
+  test("can not make leasing without having enough Agate for fee") {
     val f = for {
       fb <- traverse(nodes)(_.height).map(_.min)
 
@@ -167,12 +167,12 @@ class LeasingTransactionsSuite extends BaseTransactionSuite with CancelAfterFail
     Await.result(f, waitCompletion)
   }
 
-  test("can not make leasing without having enough your TN to self") {
+  test("can not make leasing without having enough your Agate to self") {
     val f = for {
       fb <- traverse(nodes)(_.height).map(_.min)
 
       (firstBalance, firstEffBalance) <- notMiner.accountBalances(firstAddress)
-      transferFailureAssertion        <- assertBadRequest(sender.lease(firstAddress, firstAddress, firstBalance + 1.TN, fee = defaultFee))
+      transferFailureAssertion        <- assertBadRequest(sender.lease(firstAddress, firstAddress, firstBalance + 1.Agate, fee = defaultFee))
       _                               <- traverse(nodes)(_.waitForHeight(fb + 2))
       _                               <- notMiner.assertBalances(firstAddress, firstBalance, firstEffBalance)
     } yield transferFailureAssertion

@@ -47,7 +47,7 @@ class BlockHeadersTestSuite
       Future
         .sequence {
           (1 to n).map { _ =>
-            notMiner.transfer(notMiner.address, firstAddress, (1 + Random.nextInt(10)).TN, fee)
+            notMiner.transfer(notMiner.address, firstAddress, (1 + Random.nextInt(10)).Agate, fee)
           }
         }
         .map(_ => ())
@@ -71,7 +71,7 @@ class BlockHeadersTestSuite
   "blockAt content should be equal to blockHeaderAt, except transactions info" in {
     val f = for {
       baseHeight    <- traverse(nodes)(_.height).map(_.max)
-      _             <- txRequestsGen(30, 2.TN)
+      _             <- txRequestsGen(30, 2.Agate)
       _             <- traverse(nodes)(_.waitForHeight(baseHeight + 3))
       blocks        <- traverse(nodes)(_.blockAt(baseHeight + 1))
       blocksHeaders <- traverse(nodes)(_.blockHeadersAt(baseHeight + 1))
@@ -84,7 +84,7 @@ class BlockHeadersTestSuite
   "lastBlock content should be equal to lastBlockHeader, except transactions info" in {
     val f = for {
       baseHeight    <- traverse(nodes)(_.height).map(_.max)
-      _             <- txRequestsGen(30, 2.TN)
+      _             <- txRequestsGen(30, 2.Agate)
       _             <- traverse(nodes)(_.waitForHeight(baseHeight + 1))
       blocks        <- traverse(nodes)(_.lastBlock)
       blocksHeaders <- traverse(nodes)(_.lastBlockHeaders)
@@ -99,7 +99,7 @@ class BlockHeadersTestSuite
     val f = for {
 
       baseHeight   <- traverse(nodes)(_.height).map(_.max)
-      _            <- txRequestsGen(30, 2.TN)
+      _            <- txRequestsGen(30, 2.Agate)
       _            <- nodes.waitForSameBlocksAt(3.seconds, baseHeight + 3)
       blocks       <- nodes.head.blockSeq(baseHeight + 1, baseHeight + 3)
       blockHeaders <- nodes.head.blockHeadersSeq(baseHeight + 1, baseHeight + 3)

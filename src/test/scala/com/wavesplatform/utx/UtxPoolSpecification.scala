@@ -44,7 +44,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
           BlockchainSettings('T',
                              5,
                              5,
-                             FunctionalitySettings.TESTNET.copy(preActivatedFeatures = Map(BlockchainFeatures.MassTransfer.id -> 0)),
+                             FunctionalitySettings.TESAgateET.copy(preActivatedFeatures = Map(BlockchainFeatures.MassTransfer.id -> 0)),
                              genesisSettings))
 
     val (history, state, bcu) = StorageFactory(settings, db, NTP)
@@ -95,7 +95,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
   } yield {
     val time = new TestTime()
     val utx =
-      new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, UtxSettings(10, 10.minutes, Set.empty, Set.empty, 5.minutes))
+      new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, UtxSettings(10, 10.minutes, Set.empty, Set.empty, 5.minutes))
     val amountPart = (senderBalance - fee) / 2 - fee
     val txs        = for (_ <- 1 to n) yield createWavesTransfer(sender, recipient, amountPart, fee, time.getTimestamp()).right.get
     (utx, time, txs, (offset + 1000).millis)
@@ -106,7 +106,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
       case (sender, senderBalance, state, history) =>
         val time = new TestTime()
         val utxPool =
-          new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, UtxSettings(10, 1.minute, Set.empty, Set.empty, 5.minutes))
+          new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, UtxSettings(10, 1.minute, Set.empty, Set.empty, 5.minutes))
         (sender, state, utxPool)
     }
     .label("emptyUtxPool")
@@ -118,7 +118,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
     txs <- Gen.nonEmptyListOf(transferWithRecipient(sender, recipient, senderBalance / 10, time))
   } yield {
     val settings = UtxSettings(10, 1.minute, Set.empty, Set.empty, 5.minutes)
-    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, settings)
+    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, settings)
     txs.foreach(utxPool.putIfNew)
     (sender, state, utxPool, time, settings)
   }).label("withValidPayments")
@@ -130,7 +130,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
     txs <- Gen.nonEmptyListOf(transferWithRecipient(sender, recipient, senderBalance / 10, time)) // @TODO: Random transactions
   } yield {
     val settings = UtxSettings(10, 1.minute, Set(sender.address), Set.empty, 5.minutes)
-    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, settings)
+    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, settings)
     (sender, utxPool, txs)
   }).label("withBlacklisted")
 
@@ -141,7 +141,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
     txs <- Gen.nonEmptyListOf(transferWithRecipient(sender, recipient, senderBalance / 10, time)) // @TODO: Random transactions
   } yield {
     val settings = UtxSettings(txs.length, 1.minute, Set(sender.address), Set(recipient.address), 5.minutes)
-    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, settings)
+    val utxPool  = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, settings)
     (sender, utxPool, txs)
   }).label("withBlacklistedAndAllowedByRule")
 
@@ -155,7 +155,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
     } yield {
       val whitelist: Set[String] = if (allowRecipients) recipients.map(_.address).toSet else Set.empty
       val settings               = UtxSettings(txs.length, 1.minute, Set(sender.address), whitelist, 5.minutes)
-      val utxPool                = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, settings)
+      val utxPool                = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, settings)
       (sender, utxPool, txs)
     }).label("massTransferWithBlacklisted")
 
@@ -165,7 +165,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
       val time = new TestTime()
 
       forAll(listOfN(count, transfer(sender, senderBalance / 2, time))) { txs =>
-        val utx = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESTNET, utxSettings)
+        val utx = new UtxPoolImpl(time, state, history, calculator, FunctionalitySettings.TESAgateET, utxSettings)
         f(txs, utx, time)
       }
   }
@@ -184,7 +184,7 @@ class UtxPoolSpecification extends FreeSpec with Matchers with MockFactory with 
                                 state,
                                 history,
                                 calculator,
-                                FunctionalitySettings.TESTNET,
+                                FunctionalitySettings.TESAgateET,
                                 UtxSettings(10, offset.millis, Set.empty, Set.empty, 5.minutes))
       (utx, time, tx1, (offset + 1000).millis, tx2)
     }

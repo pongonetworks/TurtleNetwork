@@ -7,7 +7,7 @@ import com.wavesplatform.it.util._
 class LeaseTransactionSuite extends BaseTransactionSuite {
 
 
-  private val defaultFee = 1.TN
+  private val defaultFee = 1.Agate
 
   test("can't lease more than you have") {
     val (balance, _) = notMiner.accountBalances(firstAddress)

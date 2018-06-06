@@ -60,7 +60,7 @@ class OrderValidatorSpecification
   val pairWavesBtc = AssetPair(None, Some(wbtc))
 
   "OrderValidator" should {
-    "allows buy TN for BTC without balance for order fee" in {
+    "allows buy Agate for BTC without balance for order fee" in {
       validateNewOrderTest(
         Portfolio(0,
                   LeaseBalance.empty,
@@ -69,7 +69,7 @@ class OrderValidatorSpecification
                   ))) shouldBe an[Right[_, _]]
     }
 
-    "does not allow buy TN for BTC when assets number is negative" in {
+    "does not allow buy Agate for BTC when assets number is negative" in {
       validateNewOrderTest(
         Portfolio(0,
                   LeaseBalance.empty,

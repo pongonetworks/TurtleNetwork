@@ -44,7 +44,7 @@ object CommonValidation {
           Left(
             GenericError(
               "Attempt to transfer unavailable funds: Transaction application leads to " +
-                s"negative TN balance to (at least) temporary negative state, current balance equals $oldWavesBalance, " +
+                s"negative Agate balance to (at least) temporary negative state, current balance equals $oldWavesBalance, " +
                 s"spends equals ${spendings.balance}, result is $newWavesBalance"))
         } else if (spendings.assets.nonEmpty) {
           val oldAssetBalances = s.portfolio(sender).assets
