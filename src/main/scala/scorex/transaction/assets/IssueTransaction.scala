@@ -108,7 +108,7 @@ object IssueTransaction extends TransactionParserFor[IssueTransaction] with Tran
       unverified.copy(signature = ByteStr(crypto.sign(sender, unverified.bodyBytes())))
     }
   private def validAssetChar(c: Char): Boolean =
-    (c != '/' && c != ':' && c != '.'
+    (c != '/' && c != ':' && c != '.')
 
   def validateIssueParams(name: Array[Byte],
                           description: Array[Byte],
