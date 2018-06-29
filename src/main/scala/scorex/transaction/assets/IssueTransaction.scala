@@ -107,8 +107,8 @@ object IssueTransaction extends TransactionParserFor[IssueTransaction] with Tran
     create(sender, name, description, quantity, decimals, reissuable, fee, timestamp, ByteStr.empty).right.map { unverified =>
       unverified.copy(signature = ByteStr(crypto.sign(sender, unverified.bodyBytes())))
     }
-  private def validAssetChar(c: Char): Boolean =
-    (c != '/' && c != ':' && c != '.')
+  private def validAssetChar(c: Byte): Boolean =
+    (ctoChar != '/' && c.toChar != ':' && c.toChar != '.')
 
   def validateIssueParams(name: Array[Byte],
                           description: Array[Byte],
@@ -119,7 +119,7 @@ object IssueTransaction extends TransactionParserFor[IssueTransaction] with Tran
     for {
       _ <- Either.cond(quantity > 0, (), ValidationError.NegativeAmount(quantity, "assets"))
       _ <- Either.cond(description.length <= MaxDescriptionLength, (), ValidationError.TooBigArray)
-      _ <- Either.cond(name.length >= MinAssetNameLength && name.length <= MaxAssetNameLength && name.forall(validAssetChar) == true, (), ValidationError.InvalidName)
+      _ <- Either.cond(name.length >= MinAssetNameLength && name.length <= MaxAssetNameLength && name.forall(validAssetChar), (), ValidationError.InvalidName)
       _ <- Either.cond(decimals >= 0 && decimals <= MaxDecimals, (), ValidationError.TooBigArray)
       _ <- Either.cond(fee > 0, (), ValidationError.InsufficientFee)
     } yield ()
