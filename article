@@ -1,0 +1,48 @@
+### Genesis Block
+
+cd code/rioos/scala/TurtleNetwork/
+
+vim src/test/resources/genesis.example.conf
+
+sbt "test:runMain tools.GenesisBlockGenerator src/test/resources/genesis.example.conf"
+
+#### Genesis Output
+[info] Running (fork) tools.GenesisBlockGenerator src/test/resources/genesis.example.conf
+[info] Addresses:
+[info] (0):
+[info]  Seed text:           foo0 is een domme koe ei gaat kapot boot de maloot azerrty
+[info]  Seed:                w3XcQR7mSB2iX3CRPNyPQK4ttJnBQ9XKTTeMdYr4agwQt3UjfUTxfGmZjZdpPYjc2NfSUNgB2fjtVc4
+[info]  Account seed:        3Qvry3mJ7jP1658E3A7NhyJ9LgwiQTRAiGeSPgYMkj6Q
+[info]  Private account key: F2eJtAWZHKe3RnV9V1j2JGGeN54xKyWtYLNmspbBTv6f
+[info]  Public account key:  FrCRDQbLZZjGnsNgN9NdT4ezqXW6HiVuudwqhsrH5M9F
+[info]  Account address:     3NNCrjMEasBm6kPYyVFLjfSV4a6wNtguaKL
+[info] (1):
+[info]  Seed text:           foo2 is een domme koe lol gaat okpk zegt de maloot
+[info]  Seed:                2GCorNKuhHbWA4d1JvMyai2p6xN6aoFs5HFgmoxacxMRxfKQcqNcM6nSb8Xezw4vu1AEX
+[info]  Account seed:        BdJ4qwQmHDGqkZiq7hCKuXT9Taao3bTdTUzAAAkUnsT5
+[info]  Private account key: CLYAqNjH28K5DKfTrQf2PX5cE56ZMq62Ez1DAT65wTkX
+[info]  Public account key:  5mzbhebVSFmFDpt8QoLMygsq46bC7nzmCNYDPFqYEdeV
+[info]  Account address:     3NKUJBQ9Xi2cVZsnQM9HUgBrca1Q7ASGubg
+[info] Settings:
+[info] genesis {
+[info]   average-block-delay: 60000ms
+[info]   initial-base-target: 153722867
+[info]   timestamp: 1500635421931
+[info]   block-timestamp: 1500635421931
+[info]   signature: "2QqS6ngUhEvLHXkbUXu6H82BjjUEEKw6bU6VbJwcqzE5BX7BeqTNXsxMLnYi113R5BTTPsVNrrqGVnx9QZndgX6p"
+[info]   initial-balance: 10000000000000000
+[info]   transactions = [
+[info]     {recipient: "3NNCrjMEasBm6kPYyVFLjfSV4a6wNtguaKL", amount: 1000000000000000},
+[info]     {recipient: "3NKUJBQ9Xi2cVZsnQM9HUgBrca1Q7ASGubg", amount: 9000000000000000}
+[info]   ]
+[info] }
+[info] Don't forget to delete the data!
+[success] Total time: 9 s, completed Sep 2, 2018, 1:47:30 PM
+
+
+### Custom Network
+
+vim TN-custom-network.conf
+
+SBT_OPTS="${SBT_OPTS} -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled --add-modules=java.xml.bind --add-exports java.base/jdk.internal.ref=ALL-UNNAMED" sbt -Dlogback.stdout.level=ERROR "run TN-custom-network.conf"
+v
