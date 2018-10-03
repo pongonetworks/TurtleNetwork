@@ -33,7 +33,7 @@ case class AssetPair(@ApiModelProperty(dataType = "java.lang.String") amountAsse
 }
 
 object AssetPair {
-  val WavesName = "TN"
+  val WavesName = "PONGO"
 
   private def extractAssetId(a: String): Try[Option[AssetId]] = a match {
     case `WavesName` => Success(None)

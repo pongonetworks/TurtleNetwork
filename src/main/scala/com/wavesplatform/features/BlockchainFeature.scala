@@ -4,7 +4,7 @@ case class BlockchainFeature private (id: Short, description: String)
 
 object BlockchainFeatures {
 
-  val SmallerMinimalGeneratingBalance = BlockchainFeature(1, "Minimum Generating Balance of 1000 TN")
+  val SmallerMinimalGeneratingBalance = BlockchainFeature(1, "Minimum Generating Balance of 1000 PONGO")
   val NG                              = BlockchainFeature(2, "NG Protocol")
   val MassTransfer                    = BlockchainFeature(3, "Mass Transfer Transaction")
   val SmartAccounts                   = BlockchainFeature(4, "Smart Accounts")
